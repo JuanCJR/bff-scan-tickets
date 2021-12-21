@@ -12,7 +12,10 @@ export default registerAs('config', () => {
     },
     app: {
       port: parseInt(process.env.APP_PORT),
-      jwtSecret:process.env.JWT_SECRET
+      jwtSecret:process.env.JWT_SECRET,
+      emailSenderUser:process.env.EMAIL_SENDER_USER,
+      emailSenderPassword:process.env.EMAIL_SENDER_PASSWORD
+
     },
   };
 });

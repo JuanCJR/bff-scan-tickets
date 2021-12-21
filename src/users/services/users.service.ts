@@ -26,6 +26,7 @@ export class UsersService {
     return await this.usersRepo.findOne({ where: { email } });
   }
 
+
   async create(payload: CreateUserDto) {
     const newUser = this.usersRepo.create(payload);
     const hashPassword = await bcrypt.hash(newUser.password, 10);

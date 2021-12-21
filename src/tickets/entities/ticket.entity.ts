@@ -9,7 +9,7 @@ import {
   JoinColumn,
   Column,
 } from 'typeorm';
-
+import { Exclude,Expose } from 'class-transformer';
 @Entity({ name: 'tickets' })
 export class Ticket {
   @PrimaryGeneratedColumn({ type: 'int' })
@@ -36,6 +36,7 @@ export class Ticket {
   @Column({ name: 'quantity', type: 'int' })
   quantity: number;
 
+  @Exclude()
   @CreateDateColumn({
     name: 'created_at',
     type: 'timestamptz',
@@ -43,6 +44,7 @@ export class Ticket {
   })
   createdAt: Date;
 
+  @Exclude()
   @UpdateDateColumn({
     name: 'updated_at',
     type: 'timestamptz',
@@ -59,4 +61,8 @@ export class Ticket {
   user: User;
 
   
+  @Expose()
+  get total(){
+    return this.quantity*this.price
+  }
 }

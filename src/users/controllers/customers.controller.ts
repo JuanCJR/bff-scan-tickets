@@ -30,6 +30,12 @@ export class CustomersController {
     findOne(@Param('id', ParseIntPipe) id: number) {
       return this.customerService.findById(id);
     }
+
+
+  @Get('exists/:rut')
+  validaExists(@Param('rut') rut: string) {
+    return this.customerService.validaExists(rut);
+  }
   
     @Post()
     create(@Body() payload: CreateCustomerDto) {

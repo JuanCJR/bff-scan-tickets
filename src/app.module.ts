@@ -28,7 +28,9 @@ import config from './config';
       TYPEORM_MIGRATIONS_DIR: Joi.string().required(),
       TYPEORM_MIGRATIONS_TABLE_NAME: Joi.string().required(),
       APP_PORT: Joi.number().required(),
-      JWT_SECRET:Joi.string().required()
+      JWT_SECRET:Joi.string().required(),
+      EMAIL_SENDER_USER:Joi.string().required(),
+      EMAIL_SENDER_PASSWORD:Joi.string().required()
     })
   }),UsersModule, TicketsModule, DatabaseModule, AuthModule],
   controllers: [AppController],
