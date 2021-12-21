@@ -7,11 +7,15 @@ import {
     ParseIntPipe,
     Post,
     Put,
+    UseGuards
   } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { CreateCustomerDto,UpdateCustomerDto } from '../dtos/customer.dto';
 import { CustomersService } from '../services/customers.service';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 
+
+@UseGuards(JwtAuthGuard)
 @ApiTags('customers')
 @Controller('customers')
 export class CustomersController {

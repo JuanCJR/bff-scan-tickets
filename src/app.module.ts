@@ -8,6 +8,7 @@ import { UsersModule } from './users/users.module';
 import { TicketsModule } from './tickets/tickets.module';
 import { DatabaseModule } from './database/database.module';
 import { enviroments } from './enviroments';
+import { AuthModule } from './auth/auth.module';
 import config from './config';
 
 @Module({
@@ -27,8 +28,9 @@ import config from './config';
       TYPEORM_MIGRATIONS_DIR: Joi.string().required(),
       TYPEORM_MIGRATIONS_TABLE_NAME: Joi.string().required(),
       APP_PORT: Joi.number().required(),
+      JWT_SECRET:Joi.string().required()
     })
-  }),UsersModule, TicketsModule, DatabaseModule],
+  }),UsersModule, TicketsModule, DatabaseModule, AuthModule],
   controllers: [AppController],
   providers: [AppService],
 })

@@ -7,11 +7,14 @@ import {
     ParseIntPipe,
     Post,
     Put,
+    UseGuards
   } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 
 import { TicketsService } from '../services/tickets.service';
 import { CreateTicketDto,UpdateTicketDto } from '../dtos/ticket.dto';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+@UseGuards(JwtAuthGuard)
 @ApiTags('tickets')
 @Controller('tickets')
 export class TicketsController {

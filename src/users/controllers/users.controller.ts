@@ -7,16 +7,20 @@ import {
   ParseIntPipe,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { CreateUserDto, UpdateUserDto } from '../dtos/user.dto';
 import { UsersService } from '../services/users.service';
-
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { Public } from '../../auth/decorators/public.decorator';
+@UseGuards(JwtAuthGuard)
 @ApiTags('users')
 @Controller('users')
 export class UsersController {
   constructor(private userService: UsersService) {}
 
+  //@Public()
   @Get()
   find() {
     return this.userService.findAll();

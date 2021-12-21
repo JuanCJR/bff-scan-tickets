@@ -1,4 +1,3 @@
-import { Ticket } from 'src/tickets/entities/ticket.entity';
 import {
   PrimaryGeneratedColumn,
   Column,
@@ -7,6 +6,9 @@ import {
   UpdateDateColumn,
   OneToMany,
 } from 'typeorm';
+import { Exclude } from 'class-transformer';
+import { Ticket } from 'src/tickets/entities/ticket.entity';
+
 
 @Entity({ name: 'users' })
 export class User {
@@ -15,7 +17,8 @@ export class User {
 
   @Column({ name: 'email', type: 'varchar', length: 255, unique: true })
   email: string;
-
+  
+  @Exclude()
   @Column({ name: 'password', type: 'varchar' })
   password: string;
 
