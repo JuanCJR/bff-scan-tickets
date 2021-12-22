@@ -30,7 +30,7 @@ export class UsersController {
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.userService.findById(id);
   }
-
+  @Public()
   @Post()
   create(@Body() payload: CreateUserDto) {
     return this.userService.create(payload);
