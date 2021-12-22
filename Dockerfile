@@ -9,7 +9,7 @@ WORKDIR /var/app
 COPY . /var/app
 
 #COPIA .env A DIRECTORIO DE APP
-#COPY .env /var/app/.env
+COPY .env /var/app/.env
 
 #INSTALACION DE PAQUETES NODE
 RUN npm install
@@ -19,7 +19,7 @@ RUN npm install
 RUN chmod +x entrypoint.sh
 
 #Define the network ports that this container will listen on at runtime.
-EXPOSE 8082
+EXPOSE 8081
 
 #Configure this container for running as an executable.
 ENTRYPOINT [ "/var/app/entrypoint.sh" ]
