@@ -58,7 +58,7 @@ export class TicketsService {
       }
     });
 
-    let info = await trasnporter.sendMail({
+    let info = trasnporter.sendMail({
       from: emailUser,
       to: customer.email,
       subject: `Notificacion Compra de Entrada `,
@@ -73,11 +73,15 @@ export class TicketsService {
         <p>Email: ${customer.email}</p>
         <p>Fecha de Compra: ${newTicket.purchaseDate}</p>
         <p>Fecha de Evento: ${newTicket.date}</p>
+        <h4><strong>Nota: Una semana antes del evento se le sera enviado los tickets con el codigo QR para la validacion de ingreso.</strong></h4>
+        <h4><strong>Importante: Para evitar robo de su ticket, no compartir el codigo QR</strong></h4>
         <hr class="featurette-divider">
         <p>Nro Tickets: ${newTicket.quantity}</p>
         <p>Valor Unitario: ${newTicket.price}CLP</p>
         <hr class="featurette-divider">
         <h5>Total: ${newTicket.total}CLP</h5></div>
+        <hr class="featurette-divider">
+        <p>Contacto de atencion: +56921216284 </p> 
             `
     });
 

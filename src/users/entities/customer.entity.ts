@@ -19,7 +19,7 @@ export class Customer {
   @Column({ name: 'last_name', type: 'varchar', length: 255 })
   lastName: string;
 
-  @Column({ name: 'email', type: 'varchar', length: 255, unique: true })
+  @Column({ name: 'email', type: 'varchar', length: 255 })
   email: string;
 
   @Column({ name: 'rut', type: 'varchar', length: 255, unique: true })
