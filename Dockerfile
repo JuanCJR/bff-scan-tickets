@@ -1,4 +1,4 @@
-#RESCATA IMAGEN DE NODE 
+#RESCATA IMAGEN DE NODE
 FROM node
 
 
@@ -9,10 +9,12 @@ WORKDIR /var/app
 COPY . /var/app
 
 #COPIA .env A DIRECTORIO DE APP
-#COPY .env /var/app/.env
+# COPY .env /var/app/.env
 
 #INSTALACION DE PAQUETES NODE
 RUN npm install
+RUN npm run prebuild
+RUN npm run build
 
 #CAMBIA PERMISOS DE EJECUCION AL ENTRYPOINT
 RUN chmod +x entrypoint.sh
