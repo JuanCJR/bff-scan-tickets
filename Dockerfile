@@ -9,11 +9,10 @@ WORKDIR /var/app
 COPY . /var/app
 
 #COPIA .env A DIRECTORIO DE APP
-COPY .env /var/app/.env
+#COPY .env /var/app/.env
 
 #INSTALACION DE PAQUETES NODE
 RUN npm install
-
 
 #CAMBIA PERMISOS DE EJECUCION AL ENTRYPOINT
 RUN chmod +x entrypoint.sh
