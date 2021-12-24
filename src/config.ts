@@ -13,6 +13,7 @@ export default registerAs('config', () => {
     app: {
       port: parseInt(process.env.APP_PORT),
       jwtSecret:process.env.JWT_SECRET,
+      jwtExpiresIn:process.env.JWT_EXPIRES_IN,
       emailSenderUser:process.env.EMAIL_SENDER_USER,
       emailSenderPassword:process.env.EMAIL_SENDER_PASSWORD
 

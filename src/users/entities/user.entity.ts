@@ -6,9 +6,12 @@ import {
   UpdateDateColumn,
   OneToMany,
 } from 'typeorm';
+
+import { Expose } from 'class-transformer';
+
 import { Exclude } from 'class-transformer';
 import { Ticket } from 'src/tickets/entities/ticket.entity';
-
+import { array } from 'joi';
 
 @Entity({ name: 'users' })
 export class User {
@@ -17,7 +20,7 @@ export class User {
 
   @Column({ name: 'email', type: 'varchar', length: 255, unique: true })
   email: string;
-  
+
   @Exclude()
   @Column({ name: 'password', type: 'varchar' })
   password: string;
@@ -37,8 +40,31 @@ export class User {
     type: 'timestamptz',
     default: () => 'CURRENT_TIMESTAMP',
   })
-  updateAt: Date;
+  updatedAt: Date;
 
+  @Exclude()
   @OneToMany(() => Ticket, (ticket) => ticket.user)
   tickets: Ticket[];
+
+  @Expose()
+  get ticketsSolds() {
+    if (this.tickets) {
+      return this.tickets.length;
+    } else {
+      return 0;
+    }
+  }
+
+  @Expose()
+  get profit() {
+    if (this.tickets) {
+      let acu = 0;
+      this.tickets.forEach((item) => {
+        acu += item.total;
+      });
+      return acu;
+    } else {
+      return 0;
+    }
+  }
 }

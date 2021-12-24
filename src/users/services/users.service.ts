@@ -10,7 +10,7 @@ import { User } from '../entities/user.entity';
 export class UsersService {
   constructor(@InjectRepository(User) private usersRepo: Repository<User>) {}
   async findAll() {
-    return await this.usersRepo.find();
+    return await this.usersRepo.find({relations:['tickets']});
   }
 
   async findById(id: number) {
@@ -23,7 +23,7 @@ export class UsersService {
   }
 
   async findByEmail(email: string) {
-    return await this.usersRepo.findOne({ where: { email } });
+    return await this.usersRepo.findOne({ where: { email },relations:["tickets"] });
   }
 
 

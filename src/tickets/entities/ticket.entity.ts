@@ -9,7 +9,7 @@ import {
   JoinColumn,
   Column,
 } from 'typeorm';
-import { Exclude,Expose } from 'class-transformer';
+import { Exclude, Expose } from 'class-transformer';
 @Entity({ name: 'tickets' })
 export class Ticket {
   @PrimaryGeneratedColumn({ type: 'int' })
@@ -60,9 +60,8 @@ export class Ticket {
   @JoinColumn({ name: 'user_id' })
   user: User;
 
-  
   @Expose()
-  get total(){
-    return this.quantity*this.price
+  get total() {
+    return this.quantity * this.price;
   }
 }

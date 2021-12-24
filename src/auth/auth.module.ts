@@ -18,7 +18,7 @@ import config from '../config';
         return {
           secret: configService.app.jwtSecret,
           signOptions: {
-            expiresIn: '1h',
+            expiresIn: configService.app.jwtExpiresIn,
           },
         };
       },
