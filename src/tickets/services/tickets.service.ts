@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException,Inject } from '@nestjs/common';
+import { Injectable, NotFoundException, Inject } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import * as nodemailer from 'nodemailer';
@@ -11,19 +11,17 @@ import { CreateTicketDto, UpdateTicketDto } from '../dtos/ticket.dto';
 import { Ticket } from '../entities/ticket.entity';
 import config from 'src/config';
 
-
 @Injectable()
 export class TicketsService {
   constructor(
     @InjectRepository(Ticket) private ticketRepo: Repository<Ticket>,
-    @Inject(config.KEY) private configService:ConfigType<typeof config>,
+    @Inject(config.KEY) private configService: ConfigType<typeof config>,
     private customerService: CustomersService,
     private userService: UsersService,
-
   ) {}
 
   async findAll() {
-    return await this.ticketRepo.find({relations:["customer","user"]});
+    return await this.ticketRepo.find({ relations: ['customer', 'user'] });
   }
 
   async findById(id: number) {
@@ -49,13 +47,13 @@ export class TicketsService {
     const emailUser = this.configService.app.emailSenderUser;
     const emailPassword = this.configService.app.emailSenderPassword;
     let trasnporter = nodemailer.createTransport({
-      host: "smtp.gmail.com",
+      host: 'smtp.gmail.com',
       port: 465,
       secure: true,
       auth: {
         user: emailUser,
         pass: emailPassword,
-      }
+      },
     });
 
     let info = trasnporter.sendMail({
@@ -82,13 +80,12 @@ export class TicketsService {
         <h5>Total: ${newTicket.total}CLP</h5></div>
         <hr class="featurette-divider">
         <p>Contacto de atencion: +56921216284 </p> 
-            `
+            `,
     });
 
-    console.log("Message sent: %s", info.messageId);
+    console.log('Message sent: %s', info.messageId);
 
     return newTicket;
-
   }
 
   async update(id: number, changes: UpdateTicketDto) {
@@ -107,5 +104,53 @@ export class TicketsService {
       throw new NotFoundException(`Ticket ${id} no encontrado`);
     }
     return this.ticketRepo.delete(id);
+  }
+
+  async findGroupedBySector() {
+    const result = await this.ticketRepo.find({
+      select: ['sector', 'quantity', 'price'],
+    });
+    const sectores = result.reduce((accu, currentVal, index, array) => {
+      if (!accu.includes(currentVal.sector)) {
+        accu.push(currentVal.sector);
+      }
+      return accu;
+    }, []);
+
+    let ticketsForSector = [];
+    let quantity = 0;
+    let total = 0;
+    sectores.forEach((sector, index) => {
+      const filteredData = result.filter((item) => item.sector === sector);
+      if (filteredData.length) {
+        quantity = 0;
+        total = 0;
+        filteredData.forEach((f) => {
+          quantity += f.quantity;
+          total += f.total;
+        });
+        ticketsForSector.push({
+          sector,
+          quantity,
+          total,
+        });
+      }
+    });
+
+    quantity = 0;
+    total = 0;
+
+    ticketsForSector.forEach((item) => {
+      quantity += item.quantity;
+      total += item.total;
+    });
+
+    const formatedResult = {
+      ticketsForSector: ticketsForSector,
+      total: total,
+      quantity: quantity,
+    };
+
+    return formatedResult;
   }
 }
