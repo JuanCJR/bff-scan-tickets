@@ -10,6 +10,7 @@ import { Repository } from 'typeorm';
 import { CreateTicketDto, UpdateTicketDto } from '../dtos/ticket.dto';
 import { Ticket } from '../entities/ticket.entity';
 import config from 'src/config';
+import { TicketsTypeService } from './tickets-type.service';
 
 @Injectable()
 export class TicketsService {
@@ -18,15 +19,18 @@ export class TicketsService {
     @Inject(config.KEY) private configService: ConfigType<typeof config>,
     private customerService: CustomersService,
     private userService: UsersService,
+    private ticketTypeService: TicketsTypeService,
   ) {}
 
   async findAll() {
-    return await this.ticketRepo.find({ relations: ['customer', 'user'] });
+    return await this.ticketRepo.find({
+      relations: ['customer', 'user', 'event'],
+    });
   }
 
   async findById(id: number) {
     const ticket = await this.ticketRepo.findOne(id, {
-      relations: ['customer', 'user'],
+      relations: ['customer', 'user', 'ticketType'],
     });
 
     if (!ticket) {
@@ -39,8 +43,13 @@ export class TicketsService {
     const newTicket = this.ticketRepo.create(payload);
     const customer = await this.customerService.findById(payload.customerId);
     const user = await this.userService.findById(payload.userId);
+    const ticketType = await this.ticketTypeService.findById(
+      payload.ticketTypeId,
+    );
+
     newTicket.customer = customer;
     newTicket.user = user;
+    newTicket.ticketType = ticketType;
 
     await this.ticketRepo.save(newTicket);
 
@@ -90,8 +99,14 @@ export class TicketsService {
 
   async update(id: number, changes: UpdateTicketDto) {
     const ticket = await this.ticketRepo.findOne(id);
+
     if (!ticket) {
       throw new NotFoundException(`Ticket ${id} no encontrado`);
+    }
+
+    if (changes.ticketTypeId) {
+      const event = await this.ticketTypeService.findById(changes.ticketTypeId);
+      ticket.ticketType = event;
     }
 
     this.ticketRepo.merge(ticket, changes);

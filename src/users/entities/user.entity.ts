@@ -11,7 +11,6 @@ import { Expose } from 'class-transformer';
 
 import { Exclude } from 'class-transformer';
 import { Ticket } from 'src/tickets/entities/ticket.entity';
-import { array } from 'joi';
 
 @Entity({ name: 'users' })
 export class User {

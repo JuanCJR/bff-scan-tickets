@@ -10,6 +10,7 @@ import {
   Column,
 } from 'typeorm';
 import { Exclude, Expose } from 'class-transformer';
+import { TicketType } from './ticket-type.entity';
 @Entity({ name: 'tickets' })
 export class Ticket {
   @PrimaryGeneratedColumn({ type: 'int' })
@@ -59,6 +60,12 @@ export class Ticket {
   @ManyToOne(() => User, (user) => user.tickets)
   @JoinColumn({ name: 'user_id' })
   user: User;
+
+  @ManyToOne(() => TicketType, (ticketType) => ticketType.tickets, {
+    nullable: true,
+  })
+  @JoinColumn({ name: 'ticket_type_id' })
+  ticketType: TicketType;
 
   @Expose()
   get total() {

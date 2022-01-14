@@ -6,7 +6,6 @@ import {
   IsString,
   IsDate,
 } from 'class-validator';
-
 export class CreateTicketDto {
   @ApiProperty()
   @IsString()
@@ -23,6 +22,7 @@ export class CreateTicketDto {
   @IsNotEmpty()
   readonly sector: string;
 
+  //Depecrated field
   @ApiProperty()
   @IsDate()
   @IsNotEmpty()
@@ -54,6 +54,12 @@ export class CreateTicketDto {
   @IsNotEmpty()
   @IsPositive()
   readonly userId: number;
+
+  @ApiProperty()
+  @IsNumber()
+  @IsNotEmpty()
+  @IsPositive()
+  readonly ticketTypeId: number;
 }
 
 export class UpdateTicketDto extends PartialType(CreateTicketDto) {}
