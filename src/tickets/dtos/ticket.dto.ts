@@ -17,26 +17,29 @@ export class CreateTicketDto {
   @IsNotEmpty()
   readonly payMethod: string;
 
-  @ApiProperty()
-  @IsString()
-  @IsNotEmpty()
-  readonly sector: string;
-
   //Depecrated field
-  @ApiProperty()
-  @IsDate()
-  @IsNotEmpty()
-  readonly date: Date;
+  // @ApiProperty()
+  // @IsString()
+  // @IsNotEmpty()
+  // readonly sector: string;
 
-  @ApiProperty()
-  @IsDate()
-  @IsNotEmpty()
-  readonly purchaseDate: Date;
+  // //Depecrated field
+  // @ApiProperty()
+  // @IsDate()
+  // @IsNotEmpty()
+  // readonly date: Date;
 
-  @ApiProperty()
-  @IsNumber()
-  @IsPositive()
-  readonly price: number;
+  // //Depecrated field
+  // @ApiProperty()
+  // @IsDate()
+  // @IsNotEmpty()
+  // readonly purchaseDate: Date;
+
+  // //Depecrated field
+  // @ApiProperty()
+  // @IsNumber()
+  // @IsPositive()
+  // readonly price: number;
 
   @ApiProperty()
   @IsNumber()

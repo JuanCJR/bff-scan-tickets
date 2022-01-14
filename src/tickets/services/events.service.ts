@@ -14,7 +14,7 @@ export class EventsService {
 
   async findById(id: number) {
     const event = await this.eventRepo.findOne(id, {
-      relations: ['tickets'],
+      relations: ['ticketsType'],
     });
     if (!event) {
       throw new NotFoundException(`Evento ${id} no encontrado`);

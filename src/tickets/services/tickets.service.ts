@@ -11,11 +11,15 @@ import { CreateTicketDto, UpdateTicketDto } from '../dtos/ticket.dto';
 import { Ticket } from '../entities/ticket.entity';
 import config from 'src/config';
 import { TicketsTypeService } from './tickets-type.service';
+import { EventsService } from './events.service';
+import { TicketType } from '../entities/ticket-type.entity';
 
 @Injectable()
 export class TicketsService {
   constructor(
     @InjectRepository(Ticket) private ticketRepo: Repository<Ticket>,
+    @InjectRepository(TicketType)
+    private ticketTypeRepo: Repository<TicketType>,
     @Inject(config.KEY) private configService: ConfigType<typeof config>,
     private customerService: CustomersService,
     private userService: UsersService,
@@ -24,7 +28,7 @@ export class TicketsService {
 
   async findAll() {
     return await this.ticketRepo.find({
-      relations: ['customer', 'user', 'event'],
+      relations: ['customer', 'user', 'ticketType'],
     });
   }
 
@@ -74,12 +78,14 @@ export class TicketsService {
         <h3>Detalle de Compra</h3>
         <hr class="featurette-divider">
         <p>Ticket #${newTicket.id}</p>
+        <p>Evento: ${newTicket.ticketType.event.description}</p>
+        <p>Ubicación: ${newTicket.ticketType.event.site}</p>
         <p>Sector: ${newTicket.sector}</p>
         <p>Metodo de Pago: ${newTicket.payMethod}</p>
         <p>Cliente: ${customer.rut} ${customer.firstName} ${customer.lastName}</p>
         <p>Email: ${customer.email}</p>
-        <p>Fecha de Compra: ${newTicket.purchaseDate}</p>
-        <p>Fecha de Evento: ${newTicket.date}</p>
+        <p>Fecha de Compra: ${newTicket.createdAt}</p>
+    <p>Fecha de Evento: ${newTicket.ticketType.event.eventDate}</p>
         <h4><strong>Nota: Una semana antes del evento se le sera enviado los tickets con el codigo QR para la validacion de ingreso.</strong></h4>
         <h4><strong>Importante: Para evitar robo de su ticket, no compartir el codigo QR</strong></h4>
         <hr class="featurette-divider">
@@ -105,8 +111,10 @@ export class TicketsService {
     }
 
     if (changes.ticketTypeId) {
-      const event = await this.ticketTypeService.findById(changes.ticketTypeId);
-      ticket.ticketType = event;
+      const ticketType = await this.ticketTypeService.findById(
+        changes.ticketTypeId,
+      );
+      ticket.ticketType = ticketType;
     }
 
     this.ticketRepo.merge(ticket, changes);
@@ -122,10 +130,12 @@ export class TicketsService {
   }
 
   async findGroupedBySector() {
-    const result = await this.ticketRepo.find({
-      select: ['sector', 'quantity', 'price'],
+    const sectorArray = await this.ticketRepo.find({
+      relations: ['ticketType', 'ticketType.event'],
+      //where: { ticketType: { event: { id: eventId } } },
     });
-    const sectores = result.reduce((accu, currentVal, index, array) => {
+
+    const sectores = sectorArray.reduce((accu, currentVal, index, array) => {
       if (!accu.includes(currentVal.sector)) {
         accu.push(currentVal.sector);
       }
@@ -136,7 +146,7 @@ export class TicketsService {
     let quantity = 0;
     let total = 0;
     sectores.forEach((sector, index) => {
-      const filteredData = result.filter((item) => item.sector === sector);
+      const filteredData = sectorArray.filter((item) => item.sector === sector);
       if (filteredData.length) {
         quantity = 0;
         total = 0;

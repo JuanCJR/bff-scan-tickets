@@ -1,5 +1,5 @@
 import { ApiProperty, PartialType } from '@nestjs/swagger';
-import { IsNotEmpty, IsString, IsDate } from 'class-validator';
+import { IsNotEmpty, IsString, IsDate, IsNumber } from 'class-validator';
 
 export class CreateTicketTypeDto {
   @ApiProperty()
@@ -13,14 +13,14 @@ export class CreateTicketTypeDto {
   readonly description: string;
 
   @ApiProperty()
-  @IsString()
+  @IsNumber()
   @IsNotEmpty()
-  readonly site: string;
+  readonly price: number;
 
   @ApiProperty()
-  @IsDate()
+  @IsNumber()
   @IsNotEmpty()
-  readonly eventDate: Date;
+  readonly eventId: number;
 }
 
-export class UpdateTicketType extends PartialType(CreateTicketTypeDto) {}
+export class UpdateTicketTypeDto extends PartialType(CreateTicketTypeDto) {}

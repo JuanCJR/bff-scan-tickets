@@ -54,16 +54,16 @@ export class User {
     }
   }
 
-  @Expose()
-  get profit() {
-    if (this.tickets) {
-      let acu = 0;
-      this.tickets.forEach((item) => {
-        acu += item.total;
-      });
-      return acu;
-    } else {
-      return 0;
-    }
-  }
+  // @Expose()
+  // get profit() {
+  //   if (this.tickets) {
+  //     let acu = 0;
+  //     this.tickets.forEach((item) => {
+  //       acu += item.total;
+  //     });
+  //     return acu;
+  //   } else {
+  //     return 0;
+  //   }
+  // }
 }

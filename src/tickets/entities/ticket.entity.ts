@@ -22,18 +22,6 @@ export class Ticket {
   @Column({ name: 'pay_method', type: 'varchar' })
   payMethod: string;
 
-  @Column({ name: 'sector', type: 'varchar' })
-  sector: string;
-
-  @Column({ name: 'date', type: 'date' })
-  date: Date;
-
-  @Column({ name: 'purchase_date', type: 'date' })
-  purchaseDate: Date;
-
-  @Column({ name: 'price', type: 'int' })
-  price: number;
-
   @Column({ name: 'quantity', type: 'int' })
   quantity: number;
 
@@ -61,14 +49,27 @@ export class Ticket {
   @JoinColumn({ name: 'user_id' })
   user: User;
 
-  @ManyToOne(() => TicketType, (ticketType) => ticketType.tickets, {
-    nullable: true,
-  })
+  @ManyToOne(() => TicketType, (ticketType) => ticketType.tickets)
   @JoinColumn({ name: 'ticket_type_id' })
   ticketType: TicketType;
 
   @Expose()
+  get price() {
+    if (this.ticketType) {
+      return this.ticketType.price;
+    }
+  }
+
+  @Expose()
+  get sector() {
+    if (this.ticketType) {
+      return this.ticketType.name;
+    }
+  }
+  @Expose()
   get total() {
-    return this.quantity * this.price;
+    if (this.ticketType) {
+      return this.quantity * this.ticketType.price;
+    }
   }
 }
