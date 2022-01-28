@@ -20,7 +20,9 @@ RUN npm run build
 RUN chmod +x entrypoint.sh
 
 #Define the network ports that this container will listen on at runtime.
-EXPOSE 8081
+#EXPOSE 8081
+EXPOSE 8082
+
 
 #Configure this container for running as an executable.
 ENTRYPOINT [ "/var/app/entrypoint.sh" ]
