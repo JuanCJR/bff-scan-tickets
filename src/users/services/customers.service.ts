@@ -24,6 +24,18 @@ export class CustomersService {
     return customer;
   }
 
+  async findTicketByRut(rut: string) {
+    const customer = await this.customerRepo.findOne({
+      where: { rut },
+      relations: ['tickets', 'tickets.ticketType'],
+    });
+
+    if (!customer) {
+      throw new NotFoundException(`Entraba bajo el Rut ${rut} no encontrado`);
+    }
+    return customer;
+  }
+
   async validaExists(rut: string) {
     const user = await this.customerRepo.findOne({ where: { rut } });
     if (!user) {
